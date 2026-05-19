@@ -104,17 +104,21 @@ def set():
         os.environ['PYTHONHASHSEED'] = str(seed)
         np.random.seed(seed)
         torch.manual_seed(seed)
-        torch.cuda.manual_seed(seed)
-        torch.cuda.manual_seed_all(seed) # if you are using multi-GPU.
-        torch.backends.cudnn.enabled = True
-        torch.backends.cudnn.benchmark = True
-        # torch.backends.cudnn.deterministic = True
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed(seed)
+            torch.cuda.manual_seed_all(seed)
+            torch.backends.cudnn.enabled = True
+            torch.backends.cudnn.benchmark = True
 
-    torch.set_default_tensor_type('torch.cuda.FloatTensor')
+    if torch.cuda.is_available() and not opt.cpu:
+        torch.set_default_tensor_type('torch.cuda.FloatTensor')
     # torch.autograd.set_detect_anomaly(True)
     
     # ========= auto setup & path handle =========
-    opt.device = 'cuda:'+str(opt.gpu)
+    if torch.cuda.is_available() and not opt.cpu:
+        opt.device = 'cuda:' + str(opt.gpu)
+    else:
+        opt.device = 'cpu'
 
 
 

@@ -46,11 +46,11 @@ def build_prior_sampler(opt, batch_size):
 def build_data_sampler(opt, batch_size, name):
 
     if util.is_toy_dataset(opt):
-        return {
-            'gmm': MixMultiVariateNormal,
+        samplers = {
+            'gmm':          lambda bs, n: MixMultiVariateNormal(bs),
             'checkerboard': Morris_Lecar,
-
-        }.get(opt.problem_name)(batch_size, name)
+        }
+        return samplers.get(opt.problem_name)(batch_size, name)
 
 
 class MixMultiVariateNormal:

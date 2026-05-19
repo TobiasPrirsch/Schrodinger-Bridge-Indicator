@@ -1,0 +1,7 @@
+{
+    "python.defaultInterpreterPath": "C:\\Users\\Prirsch22741\\AppData\\Local\\miniconda3\\envs\\sb-fbsde\\python.exe",
+    "python.terminal.activateEnvironment": true,
+    "terminal.integrated.env.windows": {
+        "CONDA_DEFAULT_ENV": "sb-fbsde"
+    }
+}

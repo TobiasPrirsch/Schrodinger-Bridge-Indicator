@@ -1,0 +1,25 @@
+name: sb-fbsde
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - numpy
+  - scipy
+  - termcolor
+  - easydict
+  - ipdb
+  - tqdm
+  - scikit-learn
+  - pandas
+  - matplotlib
+  - tensorboard
+  - pillow
+  - pyyaml
+  - pip
+  - pip:
+    - prefetch_generator
+    - colored-traceback
+    - ml-collections
+    - torch-ema
+    - gdown

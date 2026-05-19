@@ -318,11 +318,12 @@ class Runner():
         optimizer_f, _, sched_f = self.get_optimizer_ema_sched(policy_f)
         optimizer_b, _, sched_b = self.get_optimizer_ema_sched(policy_b)
 
+        use_capturable = torch.cuda.is_available()
         for group in optimizer_f.param_groups:
-            group['capturable'] = True
- 
+            group['capturable'] = use_capturable
+
         for group in optimizer_b.param_groups:
-            group['capturable'] = True
+            group['capturable'] = use_capturable
             
         ts = self.ts     
         batch_x = opt.init

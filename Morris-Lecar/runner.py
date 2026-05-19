@@ -319,11 +319,12 @@ class Runner():
         scheduler_f = StepLR(optimizer_f, step_size=200, gamma=0.6)
         scheduler_b = StepLR(optimizer_b, step_size=200, gamma=0.6)
         
+        use_capturable = torch.cuda.is_available()
         for group in optimizer_f.param_groups:
-            group['capturable'] = True
- 
+            group['capturable'] = use_capturable
+
         for group in optimizer_b.param_groups:
-            group['capturable'] = True
+            group['capturable'] = use_capturable
             
         # print(optimizer_f.state_dict()['param_groups'][0]['lr'])
 

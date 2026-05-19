@@ -76,10 +76,7 @@ def set():
     parser.add_argument("--compute-FID",    action="store_true",          help="flag: evaluate FID")
     parser.add_argument("--compute-NLL",    action="store_true",          help="flag: evaluate NLL")
 
-    # problem_name = parser.parse_args().problem_name
-    # problem_name = 'moon-to-spiral'
-    problem_name = 'checkerboard'
-    # problem_name = 'gmm'
+    problem_name = parser.parse_args().problem_name
     print(problem_name)
 
     default_config, model_configs = {
@@ -104,17 +101,21 @@ def set():
         os.environ['PYTHONHASHSEED'] = str(seed)
         np.random.seed(seed)
         torch.manual_seed(seed)
-        torch.cuda.manual_seed(seed)
-        torch.cuda.manual_seed_all(seed) # if you are using multi-GPU.
-        torch.backends.cudnn.enabled = True
-        torch.backends.cudnn.benchmark = True
-        # torch.backends.cudnn.deterministic = True
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed(seed)
+            torch.cuda.manual_seed_all(seed)
+            torch.backends.cudnn.enabled = True
+            torch.backends.cudnn.benchmark = True
 
-    torch.set_default_tensor_type('torch.cuda.FloatTensor')
+    if torch.cuda.is_available() and not opt.cpu:
+        torch.set_default_tensor_type('torch.cuda.FloatTensor')
     # torch.autograd.set_detect_anomaly(True)
-    
+
     # ========= auto setup & path handle =========
-    opt.device = 'cuda:'+str(opt.gpu)
+    if torch.cuda.is_available() and not opt.cpu:
+        opt.device = 'cuda:' + str(opt.gpu)
+    else:
+        opt.device = 'cpu'
 
     opt.model_configs = model_configs
     if opt.lr is not None:
