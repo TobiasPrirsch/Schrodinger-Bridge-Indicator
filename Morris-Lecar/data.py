@@ -103,6 +103,11 @@ class Morris_Lecar:
             td.multivariate_normal.MultivariateNormal(mu, sigma) for mu, sigma in zip(mus, sigmas)
         ]
 
+        if name == 'steady':
+            self._sample_tensor = torch.Tensor(np.load('./results/data_steady.npy'))
+        else:
+            self._sample_tensor = torch.Tensor(self.data)
+
     def log_prob(self, x):
 
         densities = [torch.exp(dist.log_prob(x)) + 1e-41 for dist in self.dists]
@@ -110,16 +115,7 @@ class Morris_Lecar:
         return torch.log(sum(densities) / len(self.dists))
 
     def sample(self):
-        n = self.batch_size
-        if self.name == 'steady':
-            data = np.load('./results/data_steady.npy')
-        elif self.name == 'cycle':
-            # data = np.load('./results/data_cycle_30_300_0.5.npy')
-            data = np.load('./results/data_cycle.npy')
-        data = torch.Tensor(data)
-
-        sample = data[0:n, :]
-        return sample
+        return self._sample_tensor[0:self.batch_size, :]
 
 
 class DataSampler:  # a dump data sampler
